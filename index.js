@@ -9,6 +9,8 @@ function ask(questionText) {
 
 async function start() {
 
+  console.clear()
+
   let numberGuess = 50;
   let maxNumber = 100;
   let minNumber = 0;
