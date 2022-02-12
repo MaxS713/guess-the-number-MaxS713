@@ -1,5 +1,13 @@
+const { clear } = require("console");
 const readline = require("readline");
 const rl = readline.createInterface(process.stdin, process.stdout);
+const keypress = async () => {
+  process.stdin.setRawMode(true)
+  return new Promise(resolve => process.stdin.once('data', () => {
+    process.stdin.setRawMode(false)
+    resolve()
+  }))
+}
 
 function ask(questionText) {
   return new Promise((resolve, reject) => {
@@ -31,6 +39,11 @@ async function start() {
   setTimeout(guess, 1500);
 
   async function guess() {
+    if (numberGuess === minNumber || numberGuess === maxNumber) {
+      console.log("\nSomething's not quite right, are you trying to cheat?\nLet's try again - Press any key to continue");
+      await keypress()
+      start()
+    }
     numberOfGuesses++;
     let confirm = await ask(`\nIs your number ${numberGuess}? (Y or N?) `);
     let saniConfirm = confirm.toLowerCase().replaceAll(" ", "");
@@ -65,19 +78,11 @@ async function start() {
       if (saniHigherOrLower === "h") {
         minNumber = numberGuess;
         numberGuess = Math.floor((maxNumber + numberGuess) / 2);
-        if (numberGuess === minNumber) {
-          console.log("\nIt could just be me but I feel like you're trying to cheat...\nLet's try again");
-          start();
-        }
         console.log(`\nOk... Let me think...`);
         setTimeout(guess, 1500);
       } else if (saniHigherOrLower === "l") {
         maxNumber = numberGuess;
         numberGuess = Math.ceil((minNumber + numberGuess) / 2);
-        if (numberGuess === maxNumber) {
-          console.log("\nIt could just be me but I feel like you're trying to cheat...\nLet's try again");
-          start();
-        }
         console.log(`\nOk... Let me think...`);
         setTimeout(guess, 1500);
       }

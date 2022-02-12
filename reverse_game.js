@@ -15,7 +15,8 @@ let numberOfGuesses = 0
 
 console.log("\nLet's play the reverse game where I (computer) make up a number and you (human) try to guess it!");
 
-let answer = await ask(`I will now pick a number between 1 and 100 (inclusive), and you will have to try to guess it...\n Type in "Go" when you're ready! Good luck! `);
+let answer = await ask(`I will now pick a number between 1 and 100 (inclusive), and you will have to try to guess it...\n \
+Type in "Go" when you're ready! Good luck! `);
 let saniAnswer = answer.toLowerCase().replaceAll(" ", "");
 
 while (saniAnswer !== "go") {
@@ -23,31 +24,44 @@ while (saniAnswer !== "go") {
     saniAnswer = answer.toLowerCase().replaceAll(" ", "");
 }
 
-console.log(`\nOk... Let me think...`);
+console.log(`\nOk... Give me a sec...`);
 let randomNumber = Math.floor(Math.random()*99 + 1);
-setTimeout(guess, 1500);
+setTimeout(firstGuess, 1500);
 
-function guess(){
-    
+async function firstGuess(){
+let guess = await ask(`\nOk, I have my number, what do you think it is? `);
+console.log("")
+humanGuess()
+
+async function humanGuess(){
     numberOfGuesses++
-    let guess = await ask(`Ok, I have my number, what do you think it is? `);
-    while (guess === NaN) {
-        answer = await ask(`\nSorry I didn't quite catch that - Type in a number! `);
+if (isNaN(guess) === true) {
+        guess = await ask(`\nSorry I didn't quite catch that - Type in a number! `);
     }
+if(parseInt(guess)===randomNumber){
+    console.log(`\nCongratulations! You found it! My number was ${randomNumber}. It took you ${numberOfGuesses} tries!`)
+    let retry = await ask("\nWould you like to play again? (Y or N) ");
+    let saniRetry = retry.toLowerCase().replaceAll(" ", "");
 
-if(guess===randomNumber){
-    console.log(`Congratulations! You found it! My number was ${randomNumber}. It took you ${numberOfGuesses} tries!`)
+    while (saniRetry !== "y" && saniRetry !== "n") {
+        retry = await ask(`\nSorry I didn't quite get that, answer with Y or N `);
+        saniRetry = retry.toLowerCase().replaceAll(" ", "");
+    }
+    if (saniRetry === "y") {
+        start();
+    } else if (saniRetry === "n") {
+        console.log("Ok! I'll see you next time!");
+        process.exit();
+    }
+} else if (guess>randomNumber){
+    guess = await ask(`That wasn't it. My number is LOWER. Guess again! `);
+    humanGuess()
+} else if (guess<randomNumber){
+    guess = await ask(`That wasn't it. My number is HIGHER. Guess again! `);
+    humanGuess()
 }
-    
-    
-    
-
-
+}
+}
 }
 
-
-
-
-
-
-}
+start()
