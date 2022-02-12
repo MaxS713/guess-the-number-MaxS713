@@ -35,8 +35,9 @@ humanGuess()
 
 async function humanGuess(){
     numberOfGuesses++
-if (isNaN(guess) === true) {
-        guess = await ask(`\nSorry I didn't quite catch that - Type in a number! `);
+while (isNaN(parseInt(guess))) {
+        guess = await ask(`Sorry I didn't quite catch that - Type in a number! `);
+        console.log("")
     }
 if(parseInt(guess)===randomNumber){
     console.log(`\nCongratulations! You found it! My number was ${randomNumber}. It took you ${numberOfGuesses} tries!`)
@@ -53,10 +54,10 @@ if(parseInt(guess)===randomNumber){
         console.log("Ok! I'll see you next time!");
         process.exit();
     }
-} else if (guess>randomNumber){
+} else if (parseInt(guess)>randomNumber){
     guess = await ask(`That wasn't it. My number is LOWER. Guess again! `);
     humanGuess()
-} else if (guess<randomNumber){
+} else if (parseInt(guess)<randomNumber){
     guess = await ask(`That wasn't it. My number is HIGHER. Guess again! `);
     humanGuess()
 }
