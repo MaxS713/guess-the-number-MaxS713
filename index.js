@@ -84,7 +84,7 @@ Let's try again - Press any key to continue");
       restart()
     }
     numberOfGuesses++;
-    let confirm = await ask(`\nIs your number ${numberGuess}? (Y or N?) `);
+    let confirm = await ask(`Is your number ${numberGuess}? (Y or N?) `);
     let saniConfirm = confirm.toLowerCase().replaceAll(" ", "");
 
     while (saniConfirm !== "y" && saniConfirm !== "n") {
@@ -108,7 +108,7 @@ Let's try again - Press any key to continue");
         process.exit();
       }
     } else {
-      let higherOrLower = await ask("\nHmmm... Ok... Is it higher or lower? (H or L) ");
+      let higherOrLower = await ask("Hmmm... Ok... Is it higher or lower? (H or L) ");
       let saniHigherOrLower = higherOrLower.toLowerCase().replaceAll(" ", "");
       while (saniHigherOrLower !== "h" && saniHigherOrLower !== "l") {
         higherOrLower = await ask(`\nSorry I didn't quite get that, answer with H or L `);
