@@ -7,7 +7,7 @@ return new Promise((resolve, reject) => {
 });
 }
 
-async function start() {
+async function reverseStart() {
 
 console.clear()
 
@@ -48,7 +48,7 @@ if(parseInt(guess)===randomNumber){
         saniRetry = retry.toLowerCase().replaceAll(" ", "");
     }
     if (saniRetry === "y") {
-        start();
+        reverseStart();
     } else if (saniRetry === "n") {
         console.log("Ok! I'll see you next time!");
         process.exit();
@@ -64,4 +64,4 @@ if(parseInt(guess)===randomNumber){
 }
 }
 
-start()
+reverseStart()
