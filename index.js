@@ -93,7 +93,7 @@ async function retry(){
   retryInput = sani(retryInput)
   while (retryInput !== "y" && retryInput !== "n") {
     retryInput = await ask(`\nSorry I didn't quite get that, answer with Y or N `);
-    retryInput = sani(retry)
+    retryInput = sani(retryInput)
   }
   if (retryInput === "y") {
     restart();
