@@ -25,6 +25,12 @@ function sani(inputToSani){
   return inputToSani.toLowerCase().replaceAll(" ", "");
 }
 
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 let maxNumber = 100;
 let minNumber = 0;
 let numberOfGuesses = 0;
@@ -75,6 +81,10 @@ async function changeRange() {
 number available to guess.\n\
 What would you like it to be? (Input any number from 1 to 9007199254740991)\n\
 \nInput: ");
+  while (isNaN(parseInt(maxNumber))) {
+    maxNumber = await ask(`Sorry I didn't quite catch that - Type in a number! `);
+  }
+  maxNumber=parseInt(maxNumber);
   console.log(`\nOk, the new range is 1 to ${maxNumber} Press any key to continue`);
   await keypress();
   mainMenu();
@@ -129,12 +139,12 @@ Let's try again - Press any key to continue");
 
       if (higherOrLower === "h") {
         minNumber = numberToGuess;
-        numberToGuess = Math.floor((maxNumber + numberToGuess) / 2);
+        numberToGuess = Math.floor((maxNumber + numberToGuess)/2);
         console.log(`\nOk... Let me think...`);
         setTimeout(game, 1500);
       } else if (higherOrLower === "l") {
         maxNumber = numberToGuess;
-        numberToGuess = Math.ceil((minNumber + numberToGuess) / 2);
+        numberToGuess = Math.ceil((minNumber + numberToGuess)/2);
         console.log(`\nOk... Let me think...`);
         setTimeout(game, 1500);
       }
@@ -158,7 +168,7 @@ and you will have to try to guess it...\nType in "Go" when you're ready! Good lu
     answer = sani(answer);
   }
   console.log(`\nOk... Give me a sec...`);
-  randomNumber = Math.floor(Math.random() * (maxNumber - 1) + 1);
+  randomNumber = getRandomIntInclusive(1, maxNumber);
   setTimeout(reverseGame, 1500);
 }
 
@@ -168,7 +178,6 @@ async function reverseGame(){
     guess = await ask(`\nOk, I have my number, what do you think it is? `);
     numberOfGuesses++
     guess = parseInt(guess);
-    console.log("");
   } 
 
   while (isNaN(guess)) {
