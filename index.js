@@ -25,12 +25,6 @@ function sani(inputToSani){
   return inputToSani.toLowerCase().replaceAll(" ", "");
 }
 
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 let maxNumber = 100;
 let minNumber = 0;
 let numberOfGuesses = 0;
@@ -108,15 +102,27 @@ async function retry(){
 async function game() {
 
   if (numberOfGuesses === 0){
+    maxNumber = maxNumber + 1;
     numberToGuess = Math.floor(maxNumber/2);
     numberOfGuesses++
     console.log(`\nOk... Let me think...`);
     setTimeout(game, 1500);
-  } else if (numberToGuess === minNumber || numberToGuess === maxNumber) {
-    console.log("\nSomething's not quite right, are you trying to cheat?\n\
-Let's try again - Press any key to continue");
+  } else if ((maxNumber-minNumber)===2) {
+    let confirm = await ask(`\nThen your number's got to be ${numberToGuess}! (Y or N) `);
+    confirm = sani(confirm)
+    while (confirm !== "y" && confirm !== "n") {
+      confirm = await ask(`\nSorry I didn't quite get that, answer with Y or N `);
+      confirm = sani(confirm)
+    }
+    if (confirm === "y") {
+      console.log(`\nYour number was ${numberToGuess}! It took me ${numberOfGuesses} tries!`);
+      retry() 
+    } else if(confirm==="n") {
+      console.log("Then something is not quite right, did you change your guess mid-game?\n\
+Let's try again - Press any key to restart")
     await keypress();
     restart();
+    }
   } else {
     let confirm = await ask(`Is your number ${numberToGuess}? (Y or N?) `);
     confirm = sani(confirm)
@@ -168,7 +174,7 @@ and you will have to try to guess it...\nType in "Go" when you're ready! Good lu
     answer = sani(answer);
   }
   console.log(`\nOk... Give me a sec...`);
-  randomNumber = getRandomIntInclusive(1, maxNumber);
+  randomNumber = Math.floor(Math.random() * (maxNumber - 1 + 1) + 1);
   setTimeout(reverseGame, 1500);
 }
 
