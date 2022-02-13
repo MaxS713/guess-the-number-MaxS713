@@ -46,7 +46,7 @@ try to guess it.");
   let answer = await ask(`Pick a number between 1 and ${maxNumber} (inclusive), \
 and I will try to guess it...\n\
 \n- Type in "Go" to play!\
-\n- Or type in "X" to extend the guess range\
+\n- Or type in "X" to change the guess range\
 \n- Or type in "R" to play the reverse game\n\
 \nInput: `);
   answer = sani(answer)
@@ -54,7 +54,7 @@ and I will try to guess it...\n\
   while (answer !== "go" && answer !== "x" && answer !== "r") {
     answer = await ask(`\nSorry I didn't quite catch that\n\
 \n- Type in "Go" to play!\
-\n- Or type in "X" to extend the guess range\
+\n- Or type in "X" to change the guess range\
 \n- Or type in "R" to play the reverse game\n\
 \nInput: `);
     answer = sani(answer)
@@ -69,7 +69,7 @@ and I will try to guess it...\n\
   }
 }
 
-async function changeRange() {
+async function changeRange(x) {
   console.clear();
   maxNumber = await ask("Here you can change the range of the game - the highest \
 number available to guess.\n\
@@ -81,7 +81,11 @@ What would you like it to be? (Input any number from 1 to 9007199254740991)\n\
   maxNumber=parseInt(maxNumber);
   console.log(`\nOk, the new range is 1 to ${maxNumber} Press any key to continue`);
   await keypress();
+  if (x===1){
+  reverseGameIntro()
+  } else {
   mainMenu();
+  }
 }
 
 async function retry(){
@@ -118,7 +122,7 @@ async function game() {
       console.log(`\nYour number was ${numberToGuess}! It took me ${numberOfGuesses} tries!`);
       retry() 
     } else if(confirm==="n") {
-      console.log("Then something is not quite right, did you change your guess mid-game?\n\
+      console.log("Hmmm... something is not quite right, did you change your guess mid-game?\n\
 Let's try again - Press any key to restart")
     await keypress();
     restart();
@@ -165,17 +169,32 @@ async function reverseGameIntro() {
   console.log("\nLet's play the reverse game where I (computer) make up a number \
 and you (human) try to guess it!");
 
-  let answer = await ask(`I will now pick a number between 1 and ${maxNumber} (inclusive), \
-and you will have to try to guess it...\nType in "Go" when you're ready! Good luck! `);
-  answer = sani(answer);
+let answer = await ask(`I will now pick a number between 1 and ${maxNumber} (inclusive), \
+and you will have to try to guess it...\n\
+\n- Type in "Go" when you're ready!\
+\n- Or type in "X" to change the guess range\
+\n- Or type in "R" to go back to the standard game\n\
+\nInput: `);
+  answer = sani(answer)
 
-  while (answer !== "go") {
-    answer = await ask(`\nSorry I didn't quite catch that - Type in "Go" when you are ready! `);
-    answer = sani(answer);
+  while (answer !== "go" && answer !== "x" && answer !== "r") {
+    answer = await ask(`\nSorry I didn't quite catch that\n\
+\n- Type in "Go" to play!\
+\n- Or type in "X" to change the guess range\
+\n- Or type in "R" to go back to the standard game\n\
+\nInput: `);
+    answer = sani(answer)
   }
-  console.log(`\nOk... Give me a sec...`);
-  randomNumber = Math.floor(Math.random() * (maxNumber - 1 + 1) + 1);
-  setTimeout(reverseGame, 1500);
+
+  if (answer === "go") {
+    console.log(`\nOk... Give me a sec...`);
+    randomNumber = Math.floor(Math.random() * (maxNumber - 1 + 1) + 1);
+    setTimeout(reverseGame, 1500);
+  } else if (answer === "x") {
+    changeRange(1);
+  } else if (answer === "r") {
+    mainMenu();
+  }
 }
 
 async function reverseGame(){
