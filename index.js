@@ -71,7 +71,7 @@ What would you like it to be? (Input any number from 1 to 9007199254740991)\n\
 
   async function start() {
 
-    let numberGuess = maxNumber/2;
+    let numberGuess = Math.floor(maxNumber/2);
     let minNumber = 0;
     let numberOfGuesses = 0;
 
