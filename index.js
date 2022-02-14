@@ -21,7 +21,7 @@ function ask(questionText) {
   });
 }
 
-function sani(inputToSani){
+function sani(inputToSani) {
   return inputToSani.toLowerCase().replaceAll(" ", "");
 }
 
@@ -31,35 +31,36 @@ let numberOfGuesses = 0;
 let numberToGuess = 50;
 
 function restart() {
-maxNumber = 100;
-minNumber = 0;
-numberOfGuesses = 0;
-numberToGuess = 50;
-mainMenu();
+  maxNumber = 100;
+  minNumber = 0;
+  numberOfGuesses = 0;
+  numberToGuess = 50;
+  mainMenu();
 }
 
-async function mainMenu(){
+async function mainMenu() {
+  
   console.clear();
   console.log("\nLet's play a game where you (human) make up a number and I (computer) \
 try to guess it.");
-
+  
   let answer = await ask(`Pick a number between 1 and ${maxNumber} (inclusive), \
 and I will try to guess it...\n\
 \n- Type in "Go" to play!\
 \n- Or type in "X" to change the guess range\
 \n- Or type in "R" to play the reverse game\n\
 \nInput: `);
-  answer = sani(answer)
-
+  answer = sani(answer);
+  
   while (answer !== "go" && answer !== "x" && answer !== "r") {
     answer = await ask(`\nSorry I didn't quite catch that\n\
 \n- Type in "Go" to play!\
 \n- Or type in "X" to change the guess range\
 \n- Or type in "R" to play the reverse game\n\
 \nInput: `);
-    answer = sani(answer)
+    answer = sani(answer);
   }
-
+  
   if (answer === "go") {
     game();
   } else if (answer === "x") {
@@ -70,31 +71,40 @@ and I will try to guess it...\n\
 }
 
 async function changeRange(x) {
+  
   console.clear();
+  
   maxNumber = await ask("Here you can change the range of the game - the highest \
 number available to guess.\n\
 What would you like it to be? (Input any number from 1 to 9007199254740991)\n\
 \nInput: ");
+  
   while (isNaN(parseInt(maxNumber))) {
     maxNumber = await ask(`Sorry I didn't quite catch that - Type in a number! `);
   }
-  maxNumber=parseInt(maxNumber);
+  
+  maxNumber = parseInt(maxNumber);
+  
   console.log(`\nOk, the new range is 1 to ${maxNumber} Press any key to continue`);
+  
   await keypress();
-  if (x===1){
-  reverseGameIntro()
+  if (x === 1) {
+    reverseGameIntro();
   } else {
-  mainMenu();
+    mainMenu();
   }
 }
 
-async function retry(){
+async function retry() {
+  
   let retryInput = await ask("\nWould you like to play again? (Y or N) ");
-  retryInput = sani(retryInput)
+  retryInput = sani(retryInput);
+  
   while (retryInput !== "y" && retryInput !== "n") {
     retryInput = await ask(`\nSorry I didn't quite get that, answer with Y or N `);
-    retryInput = sani(retryInput)
+    retryInput = sani(retryInput);
   }
+  
   if (retryInput === "y") {
     restart();
   } else if (retryInput === "n") {
@@ -104,57 +114,64 @@ async function retry(){
 }
 
 async function game() {
-
-  if (numberOfGuesses === 0){
+  
+  if (numberOfGuesses === 0) {
     maxNumber = maxNumber + 1;
-    numberToGuess = Math.floor(maxNumber/2);
-    numberOfGuesses++
+    numberToGuess = Math.floor(maxNumber / 2);
+    numberOfGuesses++;
     console.log(`\nOk... Let me think...`);
     setTimeout(game, 1500);
-  } else if ((maxNumber-minNumber)===2) {
+  } else if (maxNumber - minNumber === 2) {
     let confirm = await ask(`\nThen your number's got to be ${numberToGuess}! (Y or N) `);
-    confirm = sani(confirm)
+    confirm = sani(confirm);
+    
     while (confirm !== "y" && confirm !== "n") {
       confirm = await ask(`\nSorry I didn't quite get that, answer with Y or N `);
-      confirm = sani(confirm)
+      confirm = sani(confirm);
     }
+    
     if (confirm === "y") {
       console.log(`\nYour number was ${numberToGuess}! It took me ${numberOfGuesses} tries!`);
-      retry() 
-    } else if(confirm==="n") {
+      retry();
+    } else if (confirm === "n") {
       console.log("Hmmm... something is not quite right, did you change your guess mid-game?\n\
-Let's try again - Press any key to restart")
-    await keypress();
-    restart();
+Let's try again - Press any key to restart");
+      await keypress();
+      restart();
     }
+    
   } else {
     let confirm = await ask(`Is your number ${numberToGuess}? (Y or N?) `);
-    confirm = sani(confirm)
+    confirm = sani(confirm);
     while (confirm !== "y" && confirm !== "n") {
       confirm = await ask(`\nSorry I didn't quite get that, answer with Y or N `);
-      confirm = sani(confirm)
+      confirm = sani(confirm);
     }
-
+    
     if (confirm === "y") {
-      console.log(`\nYour number was ${numberToGuess}! It took me ${numberOfGuesses} tries!`);
-      retry() 
-    } else if(confirm==="n") {
-      numberOfGuesses++
-      let higherOrLower = await ask("Hmmm... Ok... Is it higher or lower? (H or L) ");
+      console.log(
+        `\nYour number was ${numberToGuess}! It took me ${numberOfGuesses} tries!`
+      );
+      retry();
+    } else if (confirm === "n") {
+      numberOfGuesses++;
+      let higherOrLower = await ask(
+        "Hmmm... Ok... Is it higher or lower? (H or L) "
+      );
       higherOrLower = sani(higherOrLower);
       while (higherOrLower !== "h" && higherOrLower !== "l") {
         higherOrLower = await ask(`\nSorry I didn't quite get that, answer with H or L `);
         higherOrLower = sani(higherOrLower);
       }
-
+      
       if (higherOrLower === "h") {
         minNumber = numberToGuess;
-        numberToGuess = Math.floor((maxNumber + numberToGuess)/2);
+        numberToGuess = Math.floor((maxNumber + numberToGuess) / 2);
         console.log(`\nOk... Let me think...`);
         setTimeout(game, 1500);
       } else if (higherOrLower === "l") {
         maxNumber = numberToGuess;
-        numberToGuess = Math.ceil((minNumber + numberToGuess)/2);
+        numberToGuess = Math.ceil((minNumber + numberToGuess) / 2);
         console.log(`\nOk... Let me think...`);
         setTimeout(game, 1500);
       }
@@ -163,29 +180,29 @@ Let's try again - Press any key to restart")
 }
 
 async function reverseGameIntro() {
-
+  
   console.clear();
-
+  
   console.log("\nLet's play the reverse game where I (computer) make up a number \
 and you (human) try to guess it!");
-
-let answer = await ask(`I will now pick a number between 1 and ${maxNumber} (inclusive), \
+  
+  let answer = await ask(`I will now pick a number between 1 and ${maxNumber} (inclusive), \
 and you will have to try to guess it...\n\
 \n- Type in "Go" when you're ready!\
 \n- Or type in "X" to change the guess range\
 \n- Or type in "R" to go back to the standard game\n\
 \nInput: `);
-  answer = sani(answer)
-
+  answer = sani(answer);
+  
   while (answer !== "go" && answer !== "x" && answer !== "r") {
     answer = await ask(`\nSorry I didn't quite catch that\n\
 \n- Type in "Go" to play!\
 \n- Or type in "X" to change the guess range\
 \n- Or type in "R" to go back to the standard game\n\
 \nInput: `);
-    answer = sani(answer)
+    answer = sani(answer);
   }
-
+  
   if (answer === "go") {
     console.log(`\nOk... Give me a sec...`);
     randomNumber = Math.floor(Math.random() * (maxNumber - 1 + 1) + 1);
@@ -197,24 +214,24 @@ and you will have to try to guess it...\n\
   }
 }
 
-async function reverseGame(){
-
-  if (numberOfGuesses === 0) { 
+async function reverseGame() {
+  
+  if (numberOfGuesses === 0) {
     guess = await ask(`\nOk, I have my number, what do you think it is? `);
-    numberOfGuesses++
+    numberOfGuesses++;
     guess = parseInt(guess);
-  } 
-
+  }
+  
   while (isNaN(guess)) {
     guess = await ask(`Sorry I didn't quite catch that - Type in a number! `);
     guess = parseInt(guess);
     console.log("");
   }
-
+  
   if (guess === randomNumber) {
     console.log(`\nCongratulations! You found it! My number was ${randomNumber}. \
 It took you ${numberOfGuesses} tries!`);
-    retry()
+    retry();
   } else if (guess > randomNumber) {
     guess = await ask(`That wasn't it. My number is LOWER. Guess again! `);
     numberOfGuesses++;
@@ -228,4 +245,4 @@ It took you ${numberOfGuesses} tries!`);
   }
 }
 
-restart()
+restart();
