@@ -217,6 +217,7 @@ and you will have to try to guess it...\n\
 async function reverseGame() {
   
   if (numberOfGuesses === 0) {
+    maxNumber = maxNumber + 1
     guess = await ask(`\nOk, I have my number, what do you think it is? `);
     numberOfGuesses++;
     guess = parseInt(guess);
@@ -232,20 +233,20 @@ async function reverseGame() {
     console.log(`\nCongratulations! You found it! My number was ${randomNumber}. \
 It took you ${numberOfGuesses} tries!`);
     retry();
-  } else if (guess>maxNumber || guess<1){
-    if (numberOfGuesses === 1){
-      numberOfGuesses = 0;
-    }
-    guess = await ask(`Hmm.. this is outside the range of possibility. Guess again! `);
+  } else if (guess>=maxNumber || guess<=minNumber){
+    numberOfGuesses--
+    guess = await ask(`Hmm.. this is outside the range of possibilities. Guess again! `);
     numberOfGuesses++;
     guess = parseInt(guess);
     reverseGame();
   } else if (guess > randomNumber) {
+    maxNumber = guess
     guess = await ask(`That wasn't it. My number is LOWER. Guess again! `);
     numberOfGuesses++;
     guess = parseInt(guess);
     reverseGame();
   } else if (guess < randomNumber) {
+    minNumber = guess
     guess = await ask(`That wasn't it. My number is HIGHER. Guess again! `);
     numberOfGuesses++;
     guess = parseInt(guess);
