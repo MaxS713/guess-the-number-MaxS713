@@ -117,7 +117,7 @@ async function game() {
   
   if (numberOfGuesses === 0) {
     maxNumber = maxNumber + 1;
-    numberToGuess = Math.floor(maxNumber / 2);
+    numberToGuess = Math.floor(maxNumber/2);
     numberOfGuesses++;
     console.log(`\nOk... Let me think...`);
     setTimeout(game, 1500);
@@ -166,12 +166,12 @@ Let's try again - Press any key to restart");
       
       if (higherOrLower === "h") {
         minNumber = numberToGuess;
-        numberToGuess = Math.floor((maxNumber + numberToGuess) / 2);
+        numberToGuess = Math.floor((maxNumber + numberToGuess)/2);
         console.log(`\nOk... Let me think...`);
         setTimeout(game, 1500);
       } else if (higherOrLower === "l") {
         maxNumber = numberToGuess;
-        numberToGuess = Math.ceil((minNumber + numberToGuess) / 2);
+        numberToGuess = Math.ceil((minNumber + numberToGuess)/2);
         console.log(`\nOk... Let me think...`);
         setTimeout(game, 1500);
       }
@@ -205,7 +205,7 @@ and you will have to try to guess it...\n\
   
   if (answer === "go") {
     console.log(`\nOk... Give me a sec...`);
-    randomNumber = Math.floor(Math.random() * (maxNumber - 1 + 1) + 1);
+    randomNumber = Math.floor(Math.random()*(maxNumber - 1 + 1)+1);
     setTimeout(reverseGame, 1500);
   } else if (answer === "x") {
     changeRange(1);
@@ -232,6 +232,14 @@ async function reverseGame() {
     console.log(`\nCongratulations! You found it! My number was ${randomNumber}. \
 It took you ${numberOfGuesses} tries!`);
     retry();
+  } else if (guess>maxNumber || guess<1){
+    if (numberOfGuesses === 1){
+      numberOfGuesses = 0;
+    }
+    guess = await ask(`Hmm.. this is outside the range of possibility. Guess again! `);
+    numberOfGuesses++;
+    guess = parseInt(guess);
+    reverseGame();
   } else if (guess > randomNumber) {
     guess = await ask(`That wasn't it. My number is LOWER. Guess again! `);
     numberOfGuesses++;
