@@ -5,6 +5,8 @@ const rl = readline.createInterface({
   output: process.stdout,
   terminal: false,
 });
+
+//found this on google that allows you to await any keypress - useful!
 const keypress = async () => {
   process.stdin.setRawMode(true);
   return new Promise((resolve) =>
