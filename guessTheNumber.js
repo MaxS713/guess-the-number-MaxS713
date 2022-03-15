@@ -1,4 +1,4 @@
-//boiler plate to enable readline inputs
+//boilerplate to enable readline inputs
 
 const { clear } = require("console");
 const readline = require("readline");
