@@ -1,6 +1,6 @@
 # Guess The number
 
-Project made in February 2022, during the software develpoment bootcamp of Uprgight Education - Burlington Code Academy.
+Project made in February 2022, during the software development bootcamp of Upright Education - Burlington Code Academy.
 
 # How to play
 
