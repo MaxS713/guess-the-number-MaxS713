@@ -1,4 +1,4 @@
-//boilerplate to enable readline inputs
+//boiler plate to enable readline inputs
 
 const { clear } = require("console");
 const readline = require("readline");
@@ -25,7 +25,7 @@ const keypress = async () => {
   );
 };
 
-//this "sanitize" any input given to it by lower casing and taking away any extra spaces or puntuation
+//this "sanitize" any input given to it by lower casing and taking away any extra spaces or punctuation
 //called for every input throughout the code
 //====> found this beautiful length of punctuation marks online that captures them all!
 function sani(inputToSani) {
@@ -143,8 +143,7 @@ async function retry() {
 
 //The actual guessing game where the computer tries to guess your number
 //I wanted to note here that I didn't ask the user to input his number as if the game was played with a human
-//Although this was in the original code
-//I hope that's ok
+//although this was in the original code, I hope that's ok
 async function game() {
   //Before the first guess (numberOfGuesses===0), the computer does a little bit of pre-code
   if (numberOfGuesses === 0) {
@@ -157,7 +156,7 @@ async function game() {
     //don't actually need the setTimeout but I thought it was
     //funny to make it seems like the computer is actually "thinking"
 
-    //if there is only one posibility left in the range (maxNumber - minNumber === 2),
+    //if there is only one possibility left in the range (maxNumber - minNumber === 2),
     //the computer guesses the number by itself!
   } else if (maxNumber - minNumber === 2) {
     let confirm = await ask(
